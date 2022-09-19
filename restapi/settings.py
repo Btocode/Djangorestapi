@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'custom_user',
+    'userapi',
 ]
 
 AUTH_USER_MODEL = 'custom_user.CustomUser'

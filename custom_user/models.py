@@ -16,7 +16,7 @@ class CustomUser(AbstractUser):
   TYPES = (
     ('User','User'),
     ('Driver','Driver'),
-    ('Admmin','Admin'),
+    ('Admin','Admin'),
   )
   types = models.CharField(max_length = 10, null=True,choices=TYPES)
   address = models.CharField(max_length=200, blank=True)
