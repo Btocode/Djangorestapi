@@ -11,8 +11,8 @@ class UserDetailAPI(APIView):
   authentication_classes = (TokenAuthentication,)
   permission_classes = (AllowAny,)
   def get(self,request,*args,**kwargs):
-    user = CustomUser.objects.get(id=request.user.id)
-    serializer = UserSerializer(user)
+    user = CustomUser.objects.all()
+    serializer = UserSerializer(user, many = True)
     return Response(serializer.data)
 
 #Class based view to register user
