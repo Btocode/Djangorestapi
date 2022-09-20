@@ -25,3 +25,5 @@ urlpatterns = [
  # Testing
   path('v1/token/getuser/',IndividualUserDetailAPItest.as_view()), 
 ]
+
+

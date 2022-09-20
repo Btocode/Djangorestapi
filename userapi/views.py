@@ -113,20 +113,7 @@ class IndividualUserDetailAPI(APIView):
     return Response(serializer.data)
 
 
-class IndividualUserDetailAPItest(APIView):
-  authentication_classes = (TokenAuthentication,)
-  permission_classes = [permissions.IsAuthenticated]
-  def get(self,request,*args,**kwargs):
-    # token = request.COOKIES.get('jwt')
-    # if not token:
-    #   raise AuthenticationFailed('User is not Authenticated')
-    # try:
-    #   payload = jwt.decode(token, 'secret', algorithms=['HS256'])
-    # except jwt.ExpiredSignatureError:
-    #   raise AuthenticationFailed('Unauthenticated')
-    user = CustomUser.objects.all()
-    serializer = UserSerializer(user, many = True)
-    return Response(serializer.data)
+
 
 class LogoutView(APIView):
   def post(self, request, *args,**kwargs):
@@ -136,3 +123,13 @@ class LogoutView(APIView):
       "message": "Successfully logged out"
     }
     return response
+
+class IndividualUserDetailAPItest(APIView):
+  
+  permission_classes = [permissions.IsAuthenticated]
+  def get(self,request,*args,**kwargs):
+
+
+    user = CustomUser.objects.all()
+    serializer = UserSerializer(user, many = True)
+    return Response(serializer.data)
