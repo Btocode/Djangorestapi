@@ -10,19 +10,19 @@ from .managers import CustomUserManager
 class CustomUser(AbstractUser):
   username = None
   email = models.EmailField(_('email address'), unique=True)
-  first_name = models.CharField(max_length=30, blank=True)
-  last_name = models.CharField(max_length=150, blank=True)
-  phone = models.CharField(max_length=20, blank=True)
+  first_name = models.CharField(max_length=30, blank=True, null=True)
+  last_name = models.CharField(max_length=150, blank=True, null=True)
+  phone = models.CharField(max_length=20, blank=True, null=True)
   TYPES = (
     ('User','User'),
     ('Driver','Driver'),
     ('Admin','Admin'),
   )
   types = models.CharField(max_length = 10, null=True,choices=TYPES)
-  address = models.CharField(max_length=200, blank=True)
+  address = models.CharField(max_length=200, blank=True, null=True)
 
   USERNAME_FIELD = 'email'
-  REQUIRED_FIELDS = ( 'first_name', 'last_name', 'phone', 'types')
+  REQUIRED_FIELDS = ( 'first_name', 'last_name', 'phone', 'types', 'address')
   # REQUIRED_FIELDS = []
 
   objects = CustomUserManager()

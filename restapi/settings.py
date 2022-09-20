@@ -81,11 +81,17 @@ WSGI_APPLICATION = 'restapi.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+     'default': {
+        #'ENGINE': 'django.db.backends.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'railway',
+        'USER': 'postgres',
+        'PASSWORD': 'KdJAxBEYMZCOpx9XlyBi',
+        'HOST': 'containers-us-west-73.railway.app',
+        'PORT': '7348',
     }
 }
+
 
 
 # Password validation
