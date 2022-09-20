@@ -10,8 +10,24 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.views import TokenVerifyView
+from rest_framework_simplejwt.serializers import TokenVerifySerializer
+from rest_framework import permissions
+
 
 from .serializers import RegisterSerializer, UserSerializer
+
+
+# class MyTokenVerifySerializer(TokenVerifySerializer):
+#     def validate(self, attrs):
+#         data = super().validate(attrs)
+#         data['email'] = self.email
+#         return data
+
+# class MyTokenVerifyView(TokenVerifyView):
+#     serializer_class = MyTokenVerifySerializer
+
+
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -92,8 +108,24 @@ class IndividualUserDetailAPI(APIView):
       payload = jwt.decode(token, 'secret', algorithms=['HS256'])
     except jwt.ExpiredSignatureError:
       raise AuthenticationFailed('Unauthenticated')
-    user = CustomUser.objects.filter(email = payload['id']).first()
+    user = CustomUser.objects.filter(id = payload['id']).first()
     serializer = UserSerializer(user)
+    return Response(serializer.data)
+
+
+class IndividualUserDetailAPItest(APIView):
+  authentication_classes = (TokenAuthentication,)
+  permission_classes = [permissions.IsAuthenticated]
+  def get(self,request,*args,**kwargs):
+    # token = request.COOKIES.get('jwt')
+    # if not token:
+    #   raise AuthenticationFailed('User is not Authenticated')
+    # try:
+    #   payload = jwt.decode(token, 'secret', algorithms=['HS256'])
+    # except jwt.ExpiredSignatureError:
+    #   raise AuthenticationFailed('Unauthenticated')
+    user = CustomUser.objects.all()
+    serializer = UserSerializer(user, many = True)
     return Response(serializer.data)
 
 class LogoutView(APIView):
