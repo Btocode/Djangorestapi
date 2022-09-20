@@ -1,14 +1,14 @@
-from rest_framework import serializers
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.validators import UniqueValidator
-from django.contrib.auth.password_validation import validate_password
 from custom_user.models import CustomUser
+from django.contrib.auth.password_validation import validate_password
+from rest_framework import serializers, status
+from rest_framework.response import Response
+from rest_framework.validators import UniqueValidator
+
 
 class UserSerializer(serializers.ModelSerializer):
   class Meta:
     model = CustomUser
-    fields = ["first_name", "last_name", 'email', 'phone', 'types', 'address' ]
+    fields = ["id","first_name", "last_name", 'email', 'phone', 'types', 'address' ]
 
 #Serializer to Register User
 class RegisterSerializer(serializers.ModelSerializer):

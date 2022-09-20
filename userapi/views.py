@@ -1,23 +1,43 @@
-from rest_framework.permissions import AllowAny
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from .serializers import UserSerializer,RegisterSerializer
+import datetime
+
+import jwt
 from custom_user.models import CustomUser
-from rest_framework.authentication import TokenAuthentication
 from rest_framework import generics
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
+from .serializers import RegisterSerializer, UserSerializer
 
-import jwt, datetime
 
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+
+        # Add custom claims
+        token['id'] = user.id
+        token['email'] = user.email
+        token['name'] = user.first_name + " " + user.last_name
+        token['types'] = user.types
+        token['address'] = user.address
+        token['phone'] = user.phone
+        
+
+        return token
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
 
 # Class based view to Get User Details using Token Authentication
 
 
 class UserDetailAPI(APIView):
-  authentication_classes = (TokenAuthentication,)
+  authentication_classes = (TokenAuthentication, )
   permission_classes = (AllowAny,)
   def get(self,request,*args,**kwargs):
     user = CustomUser.objects.all()
@@ -45,7 +65,8 @@ class LoginView(APIView):
       raise AuthenticationFailed('Incorrect password!')
 
     payload = {
-      'id': user.email,
+      'id': user.id,
+      'name': user.first_name + " " + user.last_name,
       'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=1),
       'iat': datetime.datetime.utcnow()
     }
